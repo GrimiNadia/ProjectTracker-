@@ -436,7 +436,7 @@
             </div>
         </div>
     </div>
-    <textarea id="myinput"></textarea>
+    
     <script>
         let projects = [];
         let timerInterval = null;
@@ -445,6 +445,7 @@
         
         // Загрузка данных при старте
         window.onload = function() {
+            loadFromLocalStorage();
             renderProjects();
         };
         
@@ -489,6 +490,26 @@
         }
         
         // Сохранение и загрузка
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('projectTrackerData', JSON.stringify(projects));
+            } catch (e) {
+                console.error('Ошибка сохранения в localStorage:', e);
+            }
+        }
+        
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('projectTrackerData');
+                if (saved) {
+                    projects = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки из localStorage:', e);
+                projects = [];
+            }
+        }
+        
         function saveData() {
             const data = JSON.stringify(projects, null, 2);
             const blob = new Blob([data], { type: 'application/json' });
@@ -583,6 +604,7 @@
             };
             
             projects.push(project);
+            saveToLocalStorage();
             renderProjects();
             
             document.getElementById('projectName').value = '';
@@ -592,6 +614,7 @@
         function deleteProject(id) {
             if (confirm('Удалить проект?')) {
                 projects = projects.filter(p => p.id !== id);
+                saveToLocalStorage();
                 renderProjects();
             }
         }
@@ -603,6 +626,7 @@
             } else if (direction === 'down' && index < projects.length - 1) {
                 [projects[index], projects[index + 1]] = [projects[index + 1], projects[index]];
             }
+            saveToLocalStorage();
             renderProjects();
         }
         
@@ -629,6 +653,7 @@
             };
             
             project.stops.push(stop);
+            saveToLocalStorage();
             renderProjects();
         }
         
@@ -735,16 +760,6 @@
                 </div>
             `).join('');
         }
-        const textarea = document.getElementById('myinput');
-    textarea.value = localStorage.getItem('myinput') || '';
-    textarea.addEventListener('input', () => {
-      localStorage.setItem('myinput', textarea.value);
-    });
     </script>
 </body>
-
-
-
 </html>
-
-
