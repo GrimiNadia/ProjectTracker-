@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трекер Проектов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .save-load-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .save-load-section h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .save-load-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .navigation {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .navigation h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 8px 15px;
+            background: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            color: #2d3748;
+        }
+        
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .timer-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .btn-secondary {
+            background: #cbd5e0;
+            color: #2d3748;
+        }
+        
+        .btn-secondary:hover {
+            background: #a0aec0;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #856404;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .add-project-section {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4a5568;
+            font-weight: 600;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .project-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            scroll-margin-top: 20px;
+        }
+        
+        .project-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .project-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+            flex: 1;
+        }
+        
+        .project-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .project-links {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #edf2f7;
+            border-radius: 8px;
+        }
+        
+        .project-links-title {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .link-item a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .stop-entries {
+            margin-top: 15px;
+        }
+        
+        .stop-entry {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stop-time {
+            color: #718096;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .stop-content {
+            margin-bottom: 8px;
+        }
+        
+        .stop-label {
+            font-weight: 600;
+            color: #4a5568;
+            display: inline-block;
+            min-width: 80px;
+        }
+        
+        .stop-text {
+            color: #2d3748;
+        }
+        
+        .questions {
+            background: #fff5f5;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            border-left: 3px solid #f56565;
+        }
+        
+        .add-stop-form {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0aec0;
+        }
+        
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .move-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Трекер Проектов</h1>
+        
+        <div class="save-load-section">
+            <h3>💾 Сохранение и загрузка данных</h3>
+            <div class="save-load-buttons">
+                <button class="btn btn-warning" onclick="saveData()">📥 Сохранить данные</button>
+                <button class="btn btn-warning" onclick="document.getElementById('fileInput').click()">📤 Загрузить данные</button>
+                <input type="file" id="fileInput" class="file-input" accept=".json" onchange="loadData(event)">
+            </div>
+            <div id="statusMessage"></div>
+        </div>
+        
+        <div class="navigation" id="navigationSection" style="display: none;">
+            <h3>🧭 Быстрая навигация по проектам:</h3>
+            <div class="nav-buttons" id="navButtons"></div>
+        </div>
+        
+        <div class="timer-section">
+            <h2>⏱️ Таймер Помодоро</h2>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-controls">
+                <button class="btn btn-success" onclick="startTimer()">▶ Старт</button>
+                <button class="btn btn-danger" onclick="pauseTimer()">⏸ Пауза</button>
+                <button class="btn btn-secondary" onclick="resetTimer()">↻ Сброс</button>
+                <button class="btn btn-secondary" onclick="setTimer(25)">25 мин</button>
+                <button class="btn btn-secondary" onclick="setTimer(30)">30 мин</button>
+                <button class="btn btn-secondary" onclick="setTimer(40)">40 мин</button>
+            </div>
+        </div>
+        
+        <div class="add-project-section">
+            <h3>➕ Добавить новый проект</h3>
+            <div class="form-group">
+                <label for="projectName">Название проекта:</label>
+                <input type="text" id="projectName" placeholder="Например: Разработка алгоритма">
+            </div>
+            <div class="form-group">
+                <label for="projectLinks">Ссылки (каждая с новой строки):</label>
+                <textarea id="projectLinks" placeholder="C:\Documents\project.docx&#10;https://example.com&#10;obsidian://open?vault=MyVault&file=Project"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="addProject()">Добавить проект</button>
+        </div>
+        
+        <div class="projects-list" id="projectsList">
+            <div class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <p>Пока нет проектов. Добавьте первый!</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let projects = [];
+        let timerInterval = null;
+        let timeLeft = 25 * 60;
+        let isRunning = false;
+        
+        // Загрузка данных при старте
+        window.onload = function() {
+            renderProjects();
+        };
+        
+        // Таймер
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        pauseTimer();
+                        alert('⏰ Время вышло! Сделай стоп-запись.');
+                    }
+                }, 1000);
+            }
+        }
+        
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+        }
+        
+        function resetTimer() {
+            pauseTimer();
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+        }
+        
+        function setTimer(minutes) {
+            pauseTimer();
+            timeLeft = minutes * 60;
+            updateTimerDisplay();
+        }
+        
+        // Сохранение и загрузка
+        function saveData() {
+            const data = JSON.stringify(projects, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const date = new Date().toISOString().split('T')[0];
+            a.href = url;
+            a.download = `projects_data_${date}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('✅ Данные успешно сохранены!', 'success');
+        }
+        
+        function loadData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const loadedProjects = JSON.parse(e.target.result);
+                    projects = loadedProjects;
+                    renderProjects();
+                    showStatus('✅ Данные успешно загружены!', 'success');
+                } catch (error) {
+                    showStatus('❌ Ошибка при загрузке файла!', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            setTimeout(() => {
+                statusDiv.textContent = '';
+                statusDiv.className = '';
+            }, 3000);
+        }
+        
+        // Навигация
+        function updateNavigation() {
+            const navSection = document.getElementById('navigationSection');
+            const navButtons = document.getElementById('navButtons');
+            
+            if (projects.length === 0) {
+                navSection.style.display = 'none';
+                return;
+            }
+            
+            navSection.style.display = 'block';
+            navButtons.innerHTML = projects.map(project => 
+                `<button class="nav-btn" onclick="scrollToProject(${project.id})">${project.name}</button>`
+            ).join('');
+        }
+        
+        function scrollToProject(id) {
+            const element = document.getElementById(`project-${id}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.style.borderColor = '#667eea';
+                element.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                setTimeout(() => {
+                    element.style.borderColor = '';
+                    element.style.boxShadow = '';
+                }, 2000);
+            }
+        }
+        
+        // Проекты
+        function addProject() {
+            const name = document.getElementById('projectName').value.trim();
+            const linksText = document.getElementById('projectLinks').value.trim();
+            
+            if (!name) {
+                alert('Введите название проекта!');
+                return;
+            }
+            
+            const links = linksText ? linksText.split('\n').filter(l => l.trim()) : [];
+            
+            const project = {
+                id: Date.now(),
+                name: name,
+                links: links,
+                stops: []
+            };
+            
+            projects.push(project);
+            renderProjects();
+            
+            document.getElementById('projectName').value = '';
+            document.getElementById('projectLinks').value = '';
+        }
+        
+        function deleteProject(id) {
+            if (confirm('Удалить проект?')) {
+                projects = projects.filter(p => p.id !== id);
+                renderProjects();
+            }
+        }
+        
+        function moveProject(id, direction) {
+            const index = projects.findIndex(p => p.id === id);
+            if (direction === 'up' && index > 0) {
+                [projects[index], projects[index - 1]] = [projects[index - 1], projects[index]];
+            } else if (direction === 'down' && index < projects.length - 1) {
+                [projects[index], projects[index + 1]] = [projects[index + 1], projects[index]];
+            }
+            renderProjects();
+        }
+        
+        function addStop(projectId) {
+            const stopText = document.getElementById(`stop-${projectId}`).value.trim();
+            const nextText = document.getElementById(`next-${projectId}`).value.trim();
+            const questionsText = document.getElementById(`questions-${projectId}`).value.trim();
+            const linksText = document.getElementById(`stopLinks-${projectId}`).value.trim();
+            
+            if (!stopText || !nextText) {
+                alert('Заполните поля СТОП и ДАЛЬШЕ!');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === projectId);
+            const links = linksText ? linksText.split('\n').filter(l => l.trim()) : [];
+            
+            const stop = {
+                time: new Date().toLocaleString('ru-RU'),
+                stop: stopText,
+                next: nextText,
+                questions: questionsText,
+                links: links
+            };
+            
+            project.stops.push(stop);
+            renderProjects();
+        }
+        
+        function renderProjects() {
+            const container = document.getElementById('projectsList');
+            updateNavigation();
+            
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>Пока нет проектов. Добавьте первый!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = projects.map((project, index) => `
+                <div class="project-card" id="project-${project.id}">
+                    <div class="project-header">
+                        <div class="project-title">${project.name}</div>
+                        <div class="project-controls">
+                            <div class="move-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="moveProject(${project.id}, 'up')" ${index === 0 ? 'disabled' : ''}>▲</button>
+                                <button class="btn btn-secondary btn-small" onclick="moveProject(${project.id}, 'down')" ${index === projects.length - 1 ? 'disabled' : ''}>▼</button>
+                            </div>
+                            <button class="btn btn-danger btn-small" onclick="deleteProject(${project.id})">🗑️ Удалить</button>
+                        </div>
+                    </div>
+                    
+                    ${project.links.length > 0 ? `
+                        <div class="project-links">
+                            <div class="project-links-title">📎 Ссылки по проекту:</div>
+                            ${project.links.map(link => `
+                                <div class="link-item">
+                                    ${link.startsWith('http') ? 
+                                        `<a href="${link}" target="_blank">${link}</a>` : 
+                                        link.startsWith('obsidian://') ?
+                                        `<a href="${link}">${link}</a>` :
+                                        `<span style="color: #2d3748;">${link}</span>`
+                                    }
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="add-stop-form">
+                        <h4 style="margin-bottom: 10px; color: #4a5568;">Добавить стоп-запись</h4>
+                        <div class="form-group">
+                            <label>СТОП (на чём остановилась):</label>
+                            <input type="text" id="stop-${project.id}" placeholder="Например: разбиралась с формулой в ячейке D15">
+                        </div>
+                        <div class="form-group">
+                            <label>ДАЛЬШЕ (следующий шаг):</label>
+                            <input type="text" id="next-${project.id}" placeholder="Например: протестировать на других строках">
+                        </div>
+                        <div class="form-group">
+                            <label>ВОПРОСЫ (что нужно выяснить):</label>
+                            <textarea id="questions-${project.id}" placeholder="Например: как оптимизировать для больших данных?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Ссылки (каждая с новой строки):</label>
+                            <textarea id="stopLinks-${project.id}" placeholder="C:\Documents\file.xlsx&#10;obsidian://open?vault=MyVault&file=Note"></textarea>
+                        </div>
+                        <button class="btn btn-success" onclick="addStop(${project.id})">✓ Добавить стоп</button>
+                    </div>
+                    
+                    ${project.stops.length > 0 ? `
+                        <div class="stop-entries">
+                            <h4 style="margin-bottom: 10px; color: #4a5568;">История работы:</h4>
+                            ${project.stops.slice().reverse().map(stop => `
+                                <div class="stop-entry">
+                                    <div class="stop-time">🕐 ${stop.time}</div>
+                                    <div class="stop-content">
+                                        <div><span class="stop-label">СТОП:</span> <span class="stop-text">${stop.stop}</span></div>
+                                    </div>
+                                    <div class="stop-content">
+                                        <div><span class="stop-label">ДАЛЬШЕ:</span> <span class="stop-text">${stop.next}</span></div>
+                                    </div>
+                                    ${stop.questions ? `
+                                        <div class="questions">
+                                            <span class="stop-label">❓ ВОПРОСЫ:</span> <span class="stop-text">${stop.questions}</span>
+                                        </div>
+                                    ` : ''}
+                                    ${stop.links && stop.links.length > 0 ? `
+                                        <div style="margin-top: 8px;">
+                                            <span class="stop-label">📎 Ссылки:</span>
+                                            ${stop.links.map(link => `
+                                                <div style="margin-left: 80px;">
+                                                    ${link.startsWith('http') ? 
+                                                        `<a href="${link}" target="_blank" style="color: #667eea;">${link}</a>` : 
+                                                        link.startsWith('obsidian://') ?
+                                                        `<a href="${link}" style="color: #667eea;">${link}</a>` :
+                                                        `<span style="color: #2d3748;">${link}</span>`
+                                                    }
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
