@@ -737,4 +737,13 @@
         }
     </script>
 </body>
+<textarea id="myinput"></textarea>
+<script>
+const textarea = document.getElementById('myinput');
+textarea.value = localStorage.getItem('myinput') || '';
+textarea.addEventListener('input', () => {
+  localStorage.setItem('myinput', textarea.value);
+});
+</script>
+
 </html>
