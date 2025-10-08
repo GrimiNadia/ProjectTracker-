@@ -436,7 +436,7 @@
             </div>
         </div>
     </div>
-    
+    <textarea id="myinput"></textarea>
     <script>
         let projects = [];
         let timerInterval = null;
@@ -735,6 +735,11 @@
                 </div>
             `).join('');
         }
+        const textarea = document.getElementById('myinput');
+    textarea.value = localStorage.getItem('myinput') || '';
+    textarea.addEventListener('input', () => {
+      localStorage.setItem('myinput', textarea.value);
+    });
     </script>
 </body>
 <textarea id="myinput"></textarea>
@@ -747,3 +752,4 @@ textarea.addEventListener('input', () => {
 </script>
 
 </html>
+
